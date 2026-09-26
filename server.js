@@ -1,5 +1,6 @@
 const express = require('express')
 const modelo = require('./modelo.js');
+const busca = require('./busca.js');
 
 const app = express()
 app.use(express.json());
@@ -56,6 +57,22 @@ app.post('/respostas', (req, res) => {
   catch(erro) {
     res.status(500).json(erro.message); 
   } 
+});
+
+app.get('/perguntas/busca', (req, res) => {
+  try {
+    const palavra_chave = req.query.q;
+
+    const perguntas = busca.buscar_perguntas(
+      palavra_chave,
+      modelo.buscar_perguntas
+    );
+
+    res.json(perguntas);
+  }
+  catch(erro) {
+    res.status(500).json(erro.message);
+  }
 });
 
 // espera e trata requisições de clientes
